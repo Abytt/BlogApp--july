@@ -11,6 +11,10 @@ app.use(Express.json())
 app.use(Cors())
 Mongoose.connect("mongodb+srv://abytomy:Aby2905@cluster0.zupck9h.mongodb.net/blogAppDb?retryWrites=true&w=majority&appName=Cluster0")
 
+
+
+//SignUp
+
 app.post("/signup", async (req, res) => {
 
     let input = req.body
