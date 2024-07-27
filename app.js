@@ -92,6 +92,34 @@ app.post("/viewall", (req, res) => {
     })
     
 })
+
+
+//view my post
+
+app.post("/viewmypost", (req, res) => {
+    let token = req.headers.token
+    let input =req.body
+
+    Jwt.verify(token, "blogApp", (error, decoded) => {
+        if (decoded && decoded.email) {
+
+            postModel.find(input).then(
+                (items) => {
+                    res.json(items)
+                }
+            ).catch(
+                (error) => {
+                    res.json({ "status": "error" })
+                }
+            )
+        }else{
+            res.json({ "Status": "Invalid emailID" })
+        }
+
+    })
+    
+})
+
 //SignUp
 
 app.post("/signup", async (req, res) => {
