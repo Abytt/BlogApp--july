@@ -12,7 +12,42 @@ app.use(Cors())
 Mongoose.connect("mongodb+srv://abytomy:Aby2905@cluster0.zupck9h.mongodb.net/blogAppDb?retryWrites=true&w=majority&appName=Cluster0")
 
 
+//SignIN
+app.post("/signIN", async (req, res) => {
 
+    let input=req.body
+    let result=userModel.find({email:req.body.email}).then(
+        (items)=>{
+            if (items.length>0) {
+              const passwordvalidator=Bcrypt.compareSync(req.body.password,items[0].password)
+              if(passwordvalidator){
+                Jwt.sign({email:req.body.email},"blogApp",{expiresIn:"1d"},
+                    (error,token)=>{
+                        if (error) {
+                            res.json({ "Status": " error","errorMessage": error})
+                            
+                        } else {
+                            res.json({ "Status": " sucess","token": token,"userId":items[0]._id })
+                            
+                        }
+                    }
+                )
+
+              }
+              else {
+              
+                res.json({ "Status": "Invalid password" })
+            }
+            }
+            else {
+              
+                res.json({ "Status": "Invalid emailID" })
+            }
+
+        }
+    )
+
+})
 //SignUp
 
 app.post("/signup", async (req, res) => {
